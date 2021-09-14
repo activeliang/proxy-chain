@@ -41,6 +41,8 @@ var HandlerForward = function (_HandlerBase) {
     function HandlerForward(options) {
         _classCallCheck(this, HandlerForward);
 
+        console.log(options);
+
         var _this = _possibleConstructorReturn(this, (HandlerForward.__proto__ || Object.getPrototypeOf(HandlerForward)).call(this, options));
 
         if (options.server.socksMode) {

@@ -347,7 +347,7 @@ var Server = exports.Server = function (_EventEmitter) {
                 handlerOpts.trgParsed.port = handlerOpts.trgParsed.port || DEFAULT_TARGET_PORT;
 
                 // Authenticate the request using a user function (if provided)
-                if (!_this6.prepareRequestFunction) return { requestAuthentication: false, upstreamProxyUrlParsed: null };
+                if (!_this6.prepareRequestFunction || _this6.socksMode) return { requestAuthentication: false, upstreamProxyUrlParsed: null };
 
                 // Pause the socket so that no data is lost
                 socket.pause();
@@ -418,7 +418,7 @@ var Server = exports.Server = function (_EventEmitter) {
 
                 return handlerOpts;
             }).finally(function () {
-                if (_this6.prepareRequestFunction) socket.resume();
+                if (_this6.prepareRequestFunction && !_this6.socksMode) socket.resume();
             });
         }
     }, {

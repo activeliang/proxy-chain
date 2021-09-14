@@ -12,6 +12,7 @@ import { SocksProxyAgent } from 'https-socks-proxy';
  */
 export default class HandlerForward extends HandlerBase {
     constructor(options) {
+        console.log(options)
         super(options);
         if (options.server.socksMode) {
             this.socksProxyUrl = options.server.prepareRequestFunction({}).socksProxyUrl

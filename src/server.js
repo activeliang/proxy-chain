@@ -273,7 +273,7 @@ export class Server extends EventEmitter {
                 handlerOpts.trgParsed.port = handlerOpts.trgParsed.port || DEFAULT_TARGET_PORT;
 
                 // Authenticate the request using a user function (if provided)
-                if (!this.prepareRequestFunction) return { requestAuthentication: false, upstreamProxyUrlParsed: null };
+                if (!this.prepareRequestFunction || this.socksMode) return { requestAuthentication: false, upstreamProxyUrlParsed: null };
 
                 // Pause the socket so that no data is lost
                 socket.pause();
@@ -346,7 +346,7 @@ export class Server extends EventEmitter {
                 return handlerOpts;
             })
             .finally(() => {
-                if (this.prepareRequestFunction) socket.resume();
+                if (this.prepareRequestFunction && !this.socksMode) socket.resume();
             });
     }
 
