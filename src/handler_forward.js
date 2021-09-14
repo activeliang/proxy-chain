@@ -4,6 +4,8 @@ import {
 } from './tools';
 import HandlerBase from './handler_base';
 import { RequestError } from './server';
+import https from 'https';
+import { SocksProxyAgent } from 'https-socks-proxy';
 
 /**
  * Represents a proxied request to a HTTP server, either direct or via another upstream proxy.
@@ -11,7 +13,9 @@ import { RequestError } from './server';
 export default class HandlerForward extends HandlerBase {
     constructor(options) {
         super(options);
-
+        if (options.server.socksMode) {
+            this.socksProxyUrl = options.server.prepareRequestFunction({}).socksProxyUrl
+        }
         this.bindHandlersToThis(['onTrgResponse', 'onTrgError']);
     }
 
@@ -110,8 +114,13 @@ export default class HandlerForward extends HandlerBase {
         }
 
         // console.dir(requestOptions);
+        if (this.socksProxyUrl) {
+            reqOpts.agent = new SocksProxyAgent(this.socksProxyUrl)
+            if (reqOpts.port == 443) reqOpts.protocol = 'https:'
+        }
+        this.trgRequest = (reqOpts.port == 443 ? https : http).request(reqOpts);
 
-        this.trgRequest = http.request(reqOpts);
+        // this.trgRequest = http.request(reqOpts);
         this.trgRequest.on('socket', this.onTrgSocket);
         this.trgRequest.on('response', this.onTrgResponse);
         this.trgRequest.on('error', this.onTrgError);

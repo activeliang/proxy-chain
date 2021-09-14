@@ -43,6 +43,7 @@
     "node": ">=10"
   },
   "dependencies": {
+    "https-socks-proxy": "^2.2.0",
     "underscore": "^1.9.1"
   },
   "devDependencies": {
